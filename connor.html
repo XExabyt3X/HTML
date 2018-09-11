@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0029)http://connor.kiwi/main/chat/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    
+    
+    <title>Chat</title>
+    
+    <link rel="stylesheet" href="./connor_files/style.css" type="text/css">
+    
+    <script type="text/javascript" src="./connor_files/jquery.min.js.download"></script>
+    <script type="text/javascript" src="./connor_files/chat.js.download"></script>
+    <script type="text/javascript">
+    
+        // ask user for name with popup prompt    
+        var name = prompt("Enter your chat name:", "Guest");
+        
+        // default name is 'Guest'
+    	if (!name || name === ' ') {
+    	   name = "Guest";	
+    	}
+    	
+    	// strip tags
+    	name = name.replace(/(<([^>]+)>)/ig,"");
+    	
+    	// display name on page
+    	$("#name-area").html("You are: <span>" + name + "</span>");
+    	
+    	// kick off chat
+        var chat =  new Chat();
+    	$(function() {
+    	
+    		 chat.getState(); 
+    		 
+    		 // watch textarea for key presses
+             $("#sendie").keydown(function(event) {  
+             
+                 var key = event.which;  
+           
+                 //all keys including return.  
+                 if (key >= 33) {
+                   
+                     var maxLength = $(this).attr("maxlength");  
+                     var length = this.value.length;  
+                     
+                     // don't allow new content if length is maxed out
+                     if (length >= maxLength) {  
+                         event.preventDefault();  
+                     }  
+                  }  
+    		 																																																});
+    		 // watch textarea for release of key press
+    		 $('#sendie').keyup(function(e) {	
+    		 					 
+    			  if (e.keyCode == 13) { 
+    			  
+                    var text = $(this).val();
+    				var maxLength = $(this).attr("maxlength");  
+                    var length = text.length; 
+                     
+                    // send 
+                    if (length <= maxLength + 1) { 
+                     
+    			        chat.send(text, name);	
+    			        $(this).val("");
+    			        
+                    } else {
+                    
+    					$(this).val(text.substring(0, maxLength));
+    					
+    				}	
+    				
+    				
+    			  }
+             });
+            
+    	});
+    </script>
+
+</head>
+
+<body onload="setInterval(&#39;chat.update()&#39;, 1000)">
+
+<div class="topnav">
+  <a href="http://connor.kiwi/main">home</a>
+  <a href="http://connor.kiwi/main/scripts">scripts</a>
+  <a href="http://connor.kiwi/main/levels">levels</a>
+  <a class="active" href="http://connor.kiwi/main/chat">chatroom</a>
+  <a href="http://connor.kiwi/main/fileshare">file share</a>
+  <a href="http://connor.kiwi/main/changelog.html">changelog</a>
+  <a href="http://connor.kiwi/main/notices.html">noticeboard</a>
+  <li style="float:right"><a href="http://connor.kiwi/main/levels/two">level two</a></li>
+  <li style="float:right"><a href="http://connor.kiwi/main/levels/three">level three</a></li>
+
+</div>
+
+
+    <div id="page-wrap">
+    
+        <h2>connor.kiwi chatroom</h2>
+        
+        <p id="name-area"></p>
+        
+        <div id="chat-wrap"><div id="chat-area"></div></div>
+        
+        <form id="send-message-area">
+            <p>your message: </p>
+            <textarea id="sendie" maxlength="100"></textarea>
+        </form>
+    
+    </div>
+
+
+
+
+</body></html>
